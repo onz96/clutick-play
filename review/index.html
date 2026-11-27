@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#10161b"><title>CLUTICK · Four Minutes to Prove Your Skill</title>
-  <script type="module" crossorigin src="./assets/index-Cs1kVTJG.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-gKO8Sv5j.css">
+  <script type="module" crossorigin src="./assets/index-DVJ7fp6_.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DzihpOIT.css">
 </head>
 <body>
+  <div id="game-shell" data-screen="battle">
   <header><div class="wrap brandbar">
     <div class="wordmark" lang="en"><i class="mark" aria-hidden="true"></i><div><b>CLUTICK</b><span class="subtitle">Four Minutes to Prove Your Skill</span></div></div>
-    <span class="version">LOCAL BUILD <b>0.1</b></span>
+    <nav class="screen-nav" aria-label="전투실 화면"><button data-screen="battle" aria-pressed="true">전투</button><button data-screen="gear" aria-pressed="false">장비</button><button data-screen="guide" aria-pressed="false">도감</button><button data-screen="labs" aria-pressed="false">실험실</button></nav>
   </div></header>
   <main class="wrap">
     <div class="intro"><div><small>4분 생존 · 타임어택</small><h1>전투실<span>.</span></h1></div><div class="season"><small>주간 시즌</small><strong id="season"></strong></div></div>
-    <button id="open-tutorial" type="button" disabled>▶ 스킬·강화 튜토리얼</button>
     <dialog id="tutorial" aria-labelledby="tutorial-title">
       <div class="tutorial-top"><h2 id="tutorial-title">스킬·강화 튜토리얼</h2><button id="close-tutorial">닫기</button></div>
       <label for="lesson-select">배울 기술</label><select id="lesson-select"></select>
@@ -30,7 +30,7 @@
           <span id="level-readout"></span><progress id="xp-progress" aria-label="다음 강화까지 경험치"></progress>
         </div></div><span id="pierce-info" hidden></span><dialog id="overlay" hidden class="overlay" aria-labelledby="dialog-title"></dialog>
         <div class="touchpad"><button id="stick" aria-label="이동 조이스틱"><i></i></button><div class="touch-actions"><button id="dash">대시</button><button id="primary-fire" hidden aria-label="기본 공격, 길게 눌러 차징">공격</button><button id="skill">중력 조준</button></div></div>
-        </div><div id="field-drawer"><button id="return-lobby">전투실로 나가기</button><div class="legend"><span><i class="gold"></i><span id="gold-label"></span></span><span><i class="erosion"></i><span id="erosion-label"></span></span><span><i class="mine"></i>지뢰</span><span>⌄⌄ 점프 착지점</span><span id="status">전장 미리보기</span></div>
+        </div><div id="field-drawer"><button id="return-lobby">전투실로 나가기</button><div class="legend"><span><i class="gold"></i><span id="gold-label"></span></span><span><i class="erosion"></i><span id="erosion-label"></span></span><span><i class="mine"></i>지뢰</span><span>◯ 점프 착지점</span><span id="status">전장 미리보기</span></div>
         <div id="readouts" hidden><span>다음 웨이브 <b id="wave-eta"></b></span><span>대시 <b id="dash-eta"></b></span><span><span id="skill-name">중력장</span> <b id="skill-eta"></b></span><span>지뢰 <b id="mine-state"></b></span><span id="trait-info" hidden></span><span id="blade-info" hidden></span><span id="gravity-round-info" hidden></span><span id="shockwave-info" hidden></span><span id="focus-info" hidden></span></div>
         <p class="zone-key">점선은 출현 예고입니다. 채워진 원 안에서 일반 몬스터를 처치하면 구역 배율이 적용됩니다.</p>
         <p id="wave-roster" hidden></p>
@@ -50,30 +50,34 @@
         </section></div>
       </section>
       <aside>
-        <section class="panel settings"><h2>출격 설정</h2>
+        <section class="panel settings gear-panel"><h2>도전자와 무기</h2>
           <label class="hero-picker">도전자 <select id="hero"><option value="tobi">토비 · 중력장</option><option value="lu">루 · 잔상 돌파</option><option value="bram">브람 · 방벽 밀치기</option><option value="ria">리아 · 속성탄</option></select></label>
-          <div class="skill-notes"><p id="hero-guide"></p><details class="skill-guide" id="lobby-skill" open><summary>고유 스킬 사용법</summary><dl></dl><button id="enter-barrier" hidden disabled>침식 밖으로 밀기 연습 · 횟수 무료</button></details></div>
+          <div class="skill-notes"><p id="hero-guide"></p></div>
           <label class="hero-picker">주무기 <select id="weapon"><option value="gun">연사총 · 단일 사격</option><option value="spear">관통창 · 직선 관통</option></select></label>
           <label class="hero-picker" id="affinity-picker" hidden>속성탄 <select id="affinity"><option value="frost">냉기 · 둔화</option><option value="fire">화염 · 지속 피해</option><option value="lightning">번개 · 인접 전이</option></select></label>
-          <details class="skill-guide upgrade-guide" id="lobby-upgrades">
-            <summary>레벨업 강화 미리보기</summary>
-            <label class="upgrade-filter"><input type="checkbox" id="transform-only" aria-controls="lobby-card-list">공격·스킬 변형만 보기</label>
-            <p id="upgrade-rule"></p><dl id="lobby-card-list"></dl>
-          </details>
+          <p id="weapon-guide"></p><button class="primary" id="ready-gear">출격 준비로</button>
+        </section>
+        <section class="panel settings battle-panel"><h2 id="equipped-title">출격 설정</h2><button type="button" id="change-gear">장비 변경</button>
           <fieldset id="modes"><legend>경쟁 모드</legend><div class="seg"><button data-mode="challenge" aria-pressed="true">월드 챌린지</button><button data-mode="legend" aria-pressed="false">월드 레전드</button></div></fieldset>
           <p id="mode-note"></p>
           <fieldset id="kinds"><legend>도전 유형</legend><div class="seg"><button data-kind="practice" aria-pressed="true">연습</button><button data-kind="ranked" aria-pressed="false">실전</button></div></fieldset>
           <div class="remaining"><span>오늘 남은 횟수</span><b id="remaining"></b></div>
           <button id="start" class="primary" disabled>전장 준비 중</button><p class="local">기본 공격은 클릭하거나 공격 버튼을 눌렀다 놓으세요. 2초부터 차징, 3초에 최대 위력. PC 고유 스킬은 마우스 오른쪽 버튼입니다.</p>
-          <div class="loadout-notes"><p id="weapon-guide"></p><details><summary>무기 8종 사용법</summary><dl id="arsenal"></dl></details></div>
+          
+          <button id="open-tutorial" type="button" disabled>스킬·강화 튜토리얼</button>
         </section>
         <section class="panel lab-entry"><h2>전투 실험실</h2><p>소형 비교 실험에서는 주무기를 자동 발사해 같은 배치를 반복 시험합니다. 도전 횟수는 소모하지 않습니다.</p><button id="enter-manual-comparison" disabled>4분 빌드 비교 · 직접 조작</button><button id="enter-build-comparison" disabled>4분 빌드 비교 · 자동 전투, 강화 직접 선택</button><button id="enter-lab" disabled>점수 실험실 열기</button><button id="enter-lingering" hidden disabled>잔류 속성 실험</button><button id="enter-counter-barrier" hidden disabled>반격 방벽 실험</button><button id="enter-return" hidden disabled>되돌이 잔상 실험</button><button id="enter-collapse" hidden disabled>중력 붕괴 실험</button><button id="enter-salvage" disabled>폭약 회수 실험</button><button id="enter-counter" disabled>회피 반격 실험</button><button id="enter-life" disabled>처치와 체력 비교 실험</button><button id="enter-split" disabled>끝분열 비교 실험</button><button id="enter-gun" disabled>부채·관통 비교 실험</button><button id="enter-ignition" disabled>점화탄 비교 실험</button><button id="enter-contract-arena" disabled>4분 계약 경기</button><details class="skill-guide blast-entry"><summary>광역 탄두 시험 방법</summary>
             <p>다가오는 적을 중력장으로 모은 뒤 폭발탄을 직접 쏘세요. 첫 레벨업에서 광역 탄두를 고르면 폭발 범위가 넓어집니다.</p>
             <p id="blast-entry-upgrades"></p><button id="enter-blast-contract" disabled>폭발탄으로 계약 경기 시작</button>
           </details><button id="enter-contract" disabled>계약 비교 실험</button><button id="enter-line" disabled>주무기 비교 실험</button><button id="enter-volley" disabled>포탑 회피 실험</button><button id="enter-weakness" hidden disabled>냉기 약점 실험</button><button id="enter-inversion" hidden disabled>반전탄 해제 실험</button><button id="enter-ending" disabled>탈락·완주 장면 비교</button></section>
-        <section class="panel guide"><h2>조작 가이드</h2><dl><div><dt>이동</dt><dd>WASD / 방향키</dd></div><div><dt>대시</dt><dd>Space</dd></div><div><dt>기본 공격</dt><dd>왼쪽 버튼 · 길게 눌러 차징</dd></div><div><dt>액티브</dt><dd>오른쪽 버튼으로 조준 후 놓기</dd></div></dl><p>왼쪽 스틱으로 이동하고 오른쪽 조준 버튼을 끌어 놓으면 발동합니다. 조준을 취소하려면 처음 누른 곳으로 되돌려 놓으세요.</p></section>
+        <section class="panel guide"><h2>조작 가이드</h2><button id="guide-tutorial">스킬·강화 튜토리얼</button><dl><div><dt>이동</dt><dd>WASD / 방향키</dd></div><div><dt>대시</dt><dd>Space</dd></div><div><dt>기본 공격</dt><dd>왼쪽 버튼 · 길게 눌러 차징</dd></div><div><dt>액티브</dt><dd>오른쪽 버튼으로 조준 후 놓기</dd></div></dl><p>왼쪽 스틱으로 이동하고 오른쪽 조준 버튼을 끌어 놓으면 발동합니다. 조준을 취소하려면 처음 누른 곳으로 되돌려 놓으세요.</p><details class="skill-guide" id="lobby-skill"><summary>고유 스킬 사용법</summary><dl></dl><button id="enter-barrier" hidden disabled>침식 밖으로 밀기 연습 · 횟수 무료</button></details><details class="skill-guide upgrade-guide" id="lobby-upgrades">
+            <summary>레벨업 강화 미리보기</summary>
+            <label class="upgrade-filter"><input type="checkbox" id="transform-only" aria-controls="lobby-card-list">공격·스킬 변형만 보기</label>
+            <p id="upgrade-rule"></p><dl id="lobby-card-list"></dl>
+          </details><div class="loadout-notes"><details><summary>무기 8종 사용법</summary><dl id="arsenal"></dl></details></div></section>
       </aside>
     </div>
   </main>
+  </div>
 </body>
 </html>
